@@ -28,3 +28,27 @@ async function main() {
   console.log("Debug: Closing mongoose");
   mongoose.connection.close();
 }
+
+async function categoryCreate(index, name, description) {
+  const category = new Category({ name: name, description: description });
+  await category.save();
+
+  //index gets manually set here for consistent results
+  genres[index] = category;
+
+  console.log("added category: " + name);
+}
+
+// note: must make the categories before making the items
+async function itemCreate(index, name, description, category, price, stock) {
+  const item = new Item({
+    name: name,
+    description: description,
+    category: category,
+    price: price,
+    stock: stock,
+  });
+  await item.save();
+  items[index] = item;
+  console.log("added item: " + name);
+}
