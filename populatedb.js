@@ -24,7 +24,11 @@ async function main() {
   console.log("debug: about to connect");
   await mongoose.connect(mongoDB);
   console.log("Debug: Should be connected?");
+
   // call functions to create data
+  await createCategories();
+  await createItems();
+
   console.log("Debug: Closing mongoose");
   mongoose.connection.close();
 }
@@ -34,21 +38,61 @@ async function categoryCreate(index, name, description) {
   await category.save();
 
   //index gets manually set here for consistent results
-  genres[index] = category;
+  categories[index] = category;
 
   console.log("added category: " + name);
 }
 
 // note: must make the categories before making the items
-async function itemCreate(index, name, description, category, price, stock) {
+async function itemCreate(index, name, description, category, price, in_stock) {
   const item = new Item({
     name: name,
     description: description,
     category: category,
     price: price,
-    stock: stock,
+    in_stock: in_stock,
   });
   await item.save();
   items[index] = item;
   console.log("added item: " + name);
+}
+
+async function createCategories() {
+  console.log("adding categories");
+  await Promise.all([
+    categoryCreate(
+      0,
+      "Fitness Equipment",
+      "Includes all equpment for staying active -- from yoga mats to dumbbells to active wear."
+    ),
+    categoryCreate(
+      1,
+      "Wellness Products",
+      "Our products tailored for promoting mental health and wellness."
+    ),
+    categoryCreate(
+      2,
+      "Supplements",
+      "Our dietary supplements for all dieting and weight loss efforts."
+    ),
+    categoryCreate(
+      3,
+      "Workout Plans",
+      "Includes all our specialized workout plans tailored to your individual fitness needs and goals."
+    ),
+  ]);
+}
+
+async function createItems() {
+  console.log("adding items");
+  await Promise.all([
+    itemCreate(
+      0,
+      "Standard Zen Yoga Mat",
+      "Our patented Zen Yoga Mat, designed to optimize flow during long sessions.",
+      categories[1],
+      29.99,
+      21
+    ),
+  ]);
 }
