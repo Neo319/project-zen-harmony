@@ -28,7 +28,7 @@ router.post("/category:id/update", category_controller.category_update_post);
 router.get("/category", category_controller.index);
 
 //GET request for listing all items in a category.
-router.get("/category:id/list", category_controller.category_list);
+router.get("/category:id/list", category_controller.category_list_get);
 
 //
 
@@ -47,6 +47,6 @@ router.get("item:id/update", item_controller.item_update_get);
 router.post("item:id/update", item_controller.item_update_post);
 
 //GET request for detail of individual item.
-router.get("item:id/detail", item_controller.item_detail_get);
+router.get("item:id/detail", item_controller.index);
 
 module.exports = router;
