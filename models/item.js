@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const ModelSchema = new Schema({
+const ItemSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   url: { type: String, required: true },
@@ -11,4 +11,4 @@ const ModelSchema = new Schema({
   in_stock: { type: Number, required: true },
 });
 
-export default mongoose.model("Category", ModelSchema);
+module.exports = mongoose.model("Item", ItemSchema);

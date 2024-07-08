@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -8,4 +8,4 @@ const CategorySchema = new Schema({
   url: { type: String, required: true },
 });
 
-export default mongoose.model("Category", CategorySchema);
+module.exports = mongoose.model("Category", CategorySchema);
