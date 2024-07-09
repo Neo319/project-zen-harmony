@@ -33,18 +33,18 @@ router.get("/category:id/list", category_controller.category_detail_get);
 /// ITEM routes ///
 
 //GET and POST request for creating an item.
-router.get("item/create", item_controller.item_create_get);
-router.post("item/create", item_controller.item_create_post);
+router.get("/item/create", item_controller.item_create_get);
+router.post("/item/create", item_controller.item_create_post);
 
 //GET and POST request to delete an item.
-router.get("item:id/delete", item_controller.item_delete_get);
-router.post("item:id/delete", item_controller.item_delete_post);
+router.get("/item:id/delete", item_controller.item_delete_get);
+router.post("/item:id/delete", item_controller.item_delete_post);
 
 //GET and POST request to update an item.
-router.get("item:id/update", item_controller.item_update_get);
-router.post("item:id/update", item_controller.item_update_post);
+router.get("/item:id/update", item_controller.item_update_get);
+router.post("/item:id/update", item_controller.item_update_post);
 
 //GET request for detail of individual item.
-router.get("item:id/detail", item_controller.index);
+router.get("/item:id/detail", item_controller.index);
 
 module.exports = router;
