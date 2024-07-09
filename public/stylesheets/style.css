@@ -12,3 +12,12 @@ a {
   grid-template-columns: 20vw 20vw;
   gap: 1em;
 }
+
+body {
+  display: flex;
+  margin: 0;
+}
+
+.layout-nav {
+  margin-right: 3em;
+}
