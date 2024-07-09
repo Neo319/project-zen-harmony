@@ -3,7 +3,7 @@ const Item = require("../models/item");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
-//List all Categories.
+// Homepage.
 exports.index = asyncHandler(async (req, res, next) => {
   const [numCategories, numItems] = await Promise.all([
     Category.countDocuments({}).exec(),
@@ -14,6 +14,36 @@ exports.index = asyncHandler(async (req, res, next) => {
     title: "Zen Harmony Home",
     category_count: numCategories,
     item_count: numItems,
+  });
+});
+
+//Display page for listing all items in a category.
+exports.category_detail_get = asyncHandler(async (req, res, next) => {
+  const [category, allCategoryItems] = await Promise.all([
+    Category.findById(req.params.id).exec(),
+    Item.find({ category: req.params.id }).exec(),
+  ]);
+
+  if (category === null) {
+    // No results.
+    const err = new Error("Author not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("category_detail", {
+    title: "Category Detail",
+    category: category,
+    category_items: allCategoryItems,
+  });
+});
+
+//Display page for listing all categpries.
+exports.category_list_get = asyncHandler(async (req, res, next) => {
+  const allCategories = await Category.find().sort({ name: 1 }).exec();
+  res.render("category_list", {
+    title: "Category List",
+    category_list: allCategories,
   });
 });
 
@@ -86,36 +116,4 @@ exports.category_update_get = asyncHandler(async (req, res, next) => {
 //Handle updating a category on POST.
 exports.category_update_post = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: category update POST");
-});
-
-//Display page for listing all items in a category.
-exports.category_detail_get = asyncHandler(async (req, res, next) => {
-  const [category, allCategoryItems] = await Promise.all([
-    Category.findById(req.params.id).exec(),
-    Item.find({ category: req.params.id }).exec(),
-  ]);
-
-  if (category === null) {
-    // No results.
-    const err = new Error("Author not found");
-    err.status = 404;
-    return next(err);
-  }
-
-  res.render("category_detail", {
-    title: "Category Detail",
-    category: category,
-    category_items: allCategoryItems,
-  });
-});
-
-//Display page for listing all categpries.
-exports.category_list_get = asyncHandler(async (req, res, next) => {
-  const allCategories = await Category.find().sort({ name: 1 }).exec();
-  res.render("category_list", {
-    title: "Category List",
-    category_list: allCategories,
-  });
-
-  // PROBLEM... no URL exists for categories?
 });

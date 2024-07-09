@@ -12,6 +12,7 @@ block content
       ul 
         each item in category_items 
           li 
+            //- temporary url: replace when item detail page exists
             a(href=item.url) #{item.name}
     else 
       p This category has no items!
