@@ -53,5 +53,9 @@ exports.category_detail_get = asyncHandler(async (req, res, next) => {
 
 //Display page for listing all categpries.
 exports.category_list_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: category list GET");
+  const allCategories = await Category.find().sort({ name: 1 }).exec();
+  res.render("category_list", {
+    title: "Category List",
+    category_list: allCategories,
+  });
 });
