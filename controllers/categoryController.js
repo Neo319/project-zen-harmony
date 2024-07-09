@@ -97,12 +97,36 @@ exports.category_create_post = [
 
 //Display page for deleting a category on GET.
 exports.category_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: category delete GET");
+  const [category, allCategoryItems] = await Promise.all([
+    Category.findById(req.params.id),
+    Item.find({ category: req.params.id }),
+  ]);
+
+  res.render("category_delete", {
+    category: category,
+    category_items: allCategoryItems,
+  });
 });
 
 //Handle deleting a category on POST.
 exports.category_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: category delete POST");
+  //Get category and all items.
+  const [category, allCategoryItems] = await Promise.all([
+    Category.findById(req.params.id),
+    Item.find({ category: req.params.id }),
+  ]);
+
+  // check if category items exist, if so, treat the same as GET route.
+  if (allCategoryItems.length > 0) {
+    res.render("category_delete", {
+      category: category,
+      category_items: allCategoryItems,
+    });
+  }
+
+  //delete category object in database.
+  await Category.findByIdAndDelete(req.params.id);
+  res.redirect("/inventory/category/");
 });
 
 //Display page for updating a category on GET.

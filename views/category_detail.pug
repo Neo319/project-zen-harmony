@@ -14,7 +14,13 @@ block content
           li 
             //- temporary url: replace when item detail page exists
             a(href=item.url) #{item.name}
+      hr
+      a(href=`/inventory/category${category.id}/update`) Update category
     else 
       p This category has no items!
+      hr
+      a(href=`/inventory/category${category.id}/update`) Update category
+      br
+      a(href=`/inventory/category${category.id}/delete`) Delete category
   else 
     p Category was not found.
