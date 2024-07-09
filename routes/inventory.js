@@ -26,7 +26,7 @@ router.post("/category:id/update", category_controller.category_update_post);
 router.get("/category/", category_controller.category_list_get);
 
 //GET request for listing all items in a category.
-router.get("/category:id/list", category_controller.category_detail_get);
+router.get("/category:id/", category_controller.category_detail_get);
 
 //
 

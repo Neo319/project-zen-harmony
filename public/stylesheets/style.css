@@ -4,5 +4,11 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
+}
+
+.form-elements {
+  display: grid;
+  grid-template-columns: 20vw 20vw;
+  gap: 1em;
 }

@@ -8,7 +8,9 @@ block content
       ul
         each category in category_list
           li 
-            a(href=category.url) #{category.name} 
+            a(href=`/inventory/category${category.id}/`) #{category.name}:
+            p #{category.description}
+            
     else 
       p No categories found.
       
