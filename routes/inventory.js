@@ -6,9 +6,7 @@ const category_controller = require("../controllers/categoryController");
 const item_controller = require("../controllers/itemController");
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
-});
+router.get("/", category_controller.index);
 
 /// CATEGORY routes ///
 
@@ -25,10 +23,10 @@ router.get("/category:id/update", category_controller.category_update_get);
 router.post("/category:id/update", category_controller.category_update_post);
 
 //GET request for listing all categories.
-router.get("/category", category_controller.index);
+router.get("/category/", category_controller.category_list_get);
 
 //GET request for listing all items in a category.
-router.get("/category:id/list", category_controller.category_list_get);
+router.get("/category:id/list", category_controller.category_detail_get);
 
 //
 

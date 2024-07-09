@@ -1,3 +1,4 @@
+require("dotenv").config();
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -9,6 +10,21 @@ var usersRouter = require("./routes/users");
 const inventoryRouter = require("./routes/inventory");
 
 var app = express();
+
+//CONNECTING TO MONGODB
+
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+
+// use production uri if present, otherwise dev uri
+const mongoDB = process.env.MONGODB_URI || process.env.mongoDB;
+
+mongoose
+  .connect(mongoDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

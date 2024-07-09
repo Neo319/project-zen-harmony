@@ -4,7 +4,16 @@ const asyncHandler = require("express-async-handler");
 
 //List all Categories.
 exports.index = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: category list GET");
+  const [numCategories, numItems] = await Promise.all([
+    Category.countDocuments({}).exec(),
+    Item.countDocuments({}).exec(),
+  ]);
+
+  res.render("index", {
+    title: "Zen Harmony Home",
+    category_count: numCategories,
+    item_count: numItems,
+  });
 });
 
 //Display page for creating new category on GET.
@@ -37,7 +46,12 @@ exports.category_update_post = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: category update POST");
 });
 
-//Display page for listing all category items.
+//Display page for listing all items in a category.
+exports.category_detail_get = asyncHandler(async (req, res, next) => {
+  res.send("NOT IMPLEMENTED: category detail GET");
+});
+
+//Display page for listing all categpries.
 exports.category_list_get = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: category list GET");
 });
