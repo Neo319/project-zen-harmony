@@ -59,15 +59,12 @@ exports.category_create_post = [
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("Category name must be specified.")
-    .isAlphanumeric()
-    .withMessage("Category name has non-alphanumeric characters."),
+    .withMessage("Category name must be specified."),
+
   body("description")
     .isLength({ min: 1 })
     .escape()
-    .withMessage("Category description must be specified.")
-    .isAlphanumeric()
-    .withMessage("Category description has non-alphanumeric characters."),
+    .withMessage("Category description must be specified."),
 
   //process request after validation (asyncHandler here)
   asyncHandler(async (req, res, next) => {
@@ -93,7 +90,7 @@ exports.category_create_post = [
       // Save category.
       await category.save();
       // Redirect to new author record.
-      res.redirect(category.url);
+      res.redirect(`/inventory/category${category.id}`);
     }
   }),
 ];
