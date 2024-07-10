@@ -2,9 +2,16 @@ const Category = require("../models/category");
 const Item = require("../models/item");
 const asyncHandler = require("express-async-handler");
 
-//List all Items.
-exports.index = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item list GET");
+//Display item detail page on GET.
+exports.item_detail_get = asyncHandler(async (req, res, next) => {
+  const item = await Item.findById(req.params.id);
+  const category = await Category.findById(item.category);
+
+  res.render("item_detail", {
+    title: "Item detail",
+    item: item,
+    category: category,
+  });
 });
 
 //Display page for creating new item on GET.

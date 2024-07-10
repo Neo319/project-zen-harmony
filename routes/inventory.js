@@ -45,6 +45,6 @@ router.get("/item:id/update", item_controller.item_update_get);
 router.post("/item:id/update", item_controller.item_update_post);
 
 //GET request for detail of individual item.
-router.get("/item:id/detail", item_controller.index);
+router.get("/item:id/", item_controller.item_detail_get);
 
 module.exports = router;

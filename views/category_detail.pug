@@ -2,6 +2,7 @@ extends layout
 
 block content 
   h1=title
+  hr
 
   if category
     h2=category.name
@@ -13,7 +14,7 @@ block content
         each item in category_items 
           li 
             //- temporary url: replace when item detail page exists
-            a(href=item.url) #{item.name}
+            a(href=`/inventory/item${item.id}`) #{item.name}
       hr
       a(href=`/inventory/category${category.id}/update`) Update category
     else 
