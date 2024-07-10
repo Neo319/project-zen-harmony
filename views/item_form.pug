@@ -1,0 +1,31 @@
+extends layout 
+
+block content
+  h1=title
+  hr
+
+  form(method="POST")
+    div.form-elements
+      label(for="name") Item Name: 
+      input#name.form_control(type='text', placeholder='What is this item called?', name='name', required value=(undefined===item ? '' : item.name))
+      label(for="description") Item Description: 
+      input#description.form_control(type='text', placeholder='Describe this item...', name='description', required value=(undefined===item ? '' : item.description))
+      label(for="price") Item Price: 
+      div.price
+        span $
+        input#price.form_control(type='number', placeholder='0,00', name='price', required value=(undefined===item ? '' : item.price))
+      label(for="in_stock") Number in Stock: 
+      input#in_stock.form_control(type='number', placeholder='10', name='in_stock', required value=(undefined===item ? '' : item.in_stock))
+      label(for="category") Item Category: 
+      select#category.form_control(name="category")
+        option(value="")  --Please Select a Category.-- 
+        for category in categories 
+          option(value=category.id) #{category.name} 
+
+
+    button.btn.btn-primary(type='submit') Submit
+      
+  if errors
+    ul
+      for error in errors
+        li!= error.msg
