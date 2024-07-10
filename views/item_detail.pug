@@ -6,8 +6,11 @@ block content
 
   //- show item name, description, category, price, in_stock
   h2=item.name
-  p Category: 
-    a(href=`/inventory/category${category.id}/`) #{category.name}
+  if category 
+    p Category: 
+      a(href=`/inventory/category${category.id}/`) #{category.name}
+  else 
+    p This item does not belong to any category!
   p #{item.description}
 
   p #[strong $#{item.price}]
