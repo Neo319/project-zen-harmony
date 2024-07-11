@@ -1,6 +1,7 @@
 const Category = require("../models/category");
 const Item = require("../models/item");
 const asyncHandler = require("express-async-handler");
+const { body, validationResult } = require("express-validator");
 
 //Display item detail page on GET.
 exports.item_detail_get = asyncHandler(async (req, res, next) => {
@@ -28,6 +29,52 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
 exports.item_create_post = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: item create POST");
 });
+
+exports.item_create_post = [
+  //Validate and sanitize data.
+  body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("description", "Description must be at least 3 characters.")
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+  body("price", "Price must be a number.")
+    .trim()
+    .isNumeric()
+    .isLength({ min: 1 })
+    .escape(),
+  body("in_stock", "no. in stock must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .isNumeric()
+    .escape(),
+  //Ensure that some category is specified
+  body("category", "category must be specified.").notEmpty().escape(),
+
+  asyncHandler(async (req, res, next) => {
+    //Extract any errors from request.
+    const errors = validationResult(req);
+
+    //create new Item object.
+    const item = new Item({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      in_stock: req.body.in_stock,
+      category: req.body.category,
+    });
+
+    if (!errors.isEmpty()) {
+      //there are errors. Re-render the form with sanitized data.
+      res.render("item_form", {
+        item: item,
+      });
+    } else {
+      //Data is valid: save to database and redirect.
+      await item.save();
+      res.redirect(`/inventory/item${item.id}/`);
+    }
+  }),
+];
 
 //Display page for deleting an item on GET.
 exports.item_delete_get = asyncHandler(async (req, res, next) => {

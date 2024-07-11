@@ -16,8 +16,10 @@ block content
         input#price.form_control(type='number', placeholder='0,00', name='price', required value=(undefined===item ? '' : item.price))
       label(for="in_stock") Number in Stock: 
       input#in_stock.form_control(type='number', placeholder='10', name='in_stock', required value=(undefined===item ? '' : item.in_stock))
+
+      //- May require update for updating implementation
       label(for="category") Item Category: 
-      select#category.form_control(name="category")
+      select#category.form_control(name="category" required)
         option(value="")  --Please Select a Category.-- 
         for category in categories 
           option(value=category.id) #{category.name} 
