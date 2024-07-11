@@ -131,10 +131,53 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
 
 //Display page for updating a category on GET.
 exports.category_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: category update GET");
+  const category = await Category.findById(req.params.id);
+
+  res.render("category_form", { title: "Update Category", category: category });
 });
 
 //Handle updating a category on POST.
-exports.category_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: category update POST");
-});
+exports.category_update_post = [
+  //Validate and sanitize data.
+  body("name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Category name must be specified."),
+
+  body("description")
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Category description must be specified."),
+
+  //process request after validation (asyncHandler here)
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    //create Category object with escaped and trimmed data.
+    const category = new Category({
+      name: req.body.name,
+      description: req.body.description,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.render("category_form", {
+        title: "Create Category",
+        category: category,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid.
+      // Update category and redirect.
+      updatedCategory = await Category.findByIdAndUpdate(
+        req.params.id,
+        category,
+        {}
+      );
+      res.redirect(`/inventory/category${updatedCategory.id}`);
+    }
+  }),
+];
