@@ -96,7 +96,19 @@ exports.item_delete_post = asyncHandler(async (req, res, next) => {
 
 //Display page for updating an item on GET.
 exports.item_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item update GET");
+  const [item, allCategories] = await Promise.all([
+    Item.findById(req.params.id),
+    Category.find().sort({ name: 1 }).exec(),
+  ]);
+
+  const itemCategory = await Category.findById(item.category);
+
+  res.render("item_form", {
+    title: "Update Item",
+    item: item,
+    categories: allCategories,
+    item_category: itemCategory,
+  });
 });
 
 //Handle updating an item on POST.

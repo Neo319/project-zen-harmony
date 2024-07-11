@@ -22,6 +22,12 @@ block content
       select#category.form_control(name="category" required)
         option(value="")  --Please Select a Category.-- 
         for category in categories 
+          if item_category
+            if item_category.name===category.name 
+              option(value=category.id selected) #{category.name} 
+            else
+              option(value=category.id) #{category.name} 
+          else
           option(value=category.id) #{category.name} 
 
 
