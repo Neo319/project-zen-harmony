@@ -1,0 +1,14 @@
+extends layout 
+
+block content
+  h1=title 
+  
+  if item
+    h2 #[strong Are you sure you want to delete this item?]
+    h3 #[strong Item: ]#{item.name}
+    p #{item.description}
+    p #[strong Category: ] #{category.name}
+    form(method="POST")
+      button(type="submit") Delete
+  else 
+    p Item was not found!

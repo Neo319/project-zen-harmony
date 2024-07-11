@@ -15,3 +15,8 @@ block content
 
   p #[strong $#{item.price}]
   p no. in stock: #{item.in_stock}
+
+  hr
+  a(href=`/inventory/item${item.id}/update`) Update item
+  br
+  a(href=`/inventory/item${item.id}/delete`) Delete item

@@ -26,10 +26,6 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
 });
 
 //Handle creating a new item on POST.
-exports.item_create_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item create POST");
-});
-
 exports.item_create_post = [
   //Validate and sanitize data.
   body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
@@ -66,6 +62,7 @@ exports.item_create_post = [
     if (!errors.isEmpty()) {
       //there are errors. Re-render the form with sanitized data.
       res.render("item_form", {
+        title: "Create Item",
         item: item,
       });
     } else {
@@ -78,12 +75,23 @@ exports.item_create_post = [
 
 //Display page for deleting an item on GET.
 exports.item_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item delete GET");
+  const item = await Item.findById(req.params.id);
+  const category = await Category.findById(item.category);
+
+  res.render("item_delete", {
+    title: "Delete Item",
+    item: item,
+    category: category,
+  });
 });
 
 //Handle deleting an item on POST.
 exports.item_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item delete POST");
+  const item = await Item.findById(req.params.id);
+
+  //No checks needed.
+  await Item.findByIdAndDelete(req.params.id);
+  res.redirect(`/inventory/category${item.category}/`);
 });
 
 //Display page for updating an item on GET.
