@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+// ------------------------- TODO: Refactor PopulateDB for SQL -------------------------
+
 console.log(
   "this script populates a database with some sample categories and items. The database should be passed as an argument when this command is run. Provide MongoDB URI as a string."
 );

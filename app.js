@@ -11,6 +11,8 @@ const inventoryRouter = require("./routes/inventory");
 
 var app = express();
 
+// ------------------------- TODO: Connect to SQL DB -------------------------
+
 //CONNECTING TO MONGODB
 
 const mongoose = require("mongoose");
