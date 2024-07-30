@@ -3,12 +3,13 @@ const Item = require("../models/item");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
+const db = require("../db/queries");
+
 // Homepage.
 exports.index = asyncHandler(async (req, res, next) => {
-  const [numCategories, numItems] = await Promise.all([
-    Category.countDocuments({}).exec(),
-    Item.countDocuments({}).exec(),
-  ]);
+  const numCategories = await db.countCategories();
+  const numItems = await db.countItems();
+  console.log(numCategories);
 
   res.render("index", {
     title: "Zen Harmony Home",
