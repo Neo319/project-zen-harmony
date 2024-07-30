@@ -93,8 +93,6 @@ exports.category_create_post = [
   }),
 ];
 
-// ------------------- TODO ... from here -------------------
-
 //Display page for deleting a category on GET.
 exports.category_delete_get = asyncHandler(async (req, res, next) => {
   //db query: getCategoryById, getItemsByCategory
@@ -131,10 +129,11 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
   res.redirect("/inventory/category/");
 });
 
+// ------------------- TODO ... from here -------------------
+
 //Display page for updating a category on GET.
 exports.category_update_get = asyncHandler(async (req, res, next) => {
-  const category = await Category.findById(req.params.id);
-
+  const category = await db.getCategoryById(req.params.id);
   res.render("category_form", { title: "Update Category", category: category });
 });
 
@@ -157,11 +156,11 @@ exports.category_update_post = [
     const errors = validationResult(req);
 
     //create Category object with escaped and trimmed data.
-    const category = new Category({
+    const category = {
       name: req.body.name,
       description: req.body.description,
-      _id: req.params.id,
-    });
+      id: req.params.id,
+    };
 
     if (!errors.isEmpty()) {
       // There are errors. Render form again with sanitized values/errors messages.
@@ -174,12 +173,13 @@ exports.category_update_post = [
     } else {
       // Data from form is valid.
       // Update category and redirect.
-      updatedCategory = await Category.findByIdAndUpdate(
+
+      const updatedCategory = await db.updateCategoryById(
         req.params.id,
-        category,
-        {}
+        category
       );
-      res.redirect(`/inventory/category${updatedCategory.id}`);
+
+      res.redirect(`/inventory/category${category.id}`);
     }
   }),
 ];
