@@ -18,30 +18,27 @@ exports.index = asyncHandler(async (req, res, next) => {
   });
 });
 
-// ------------------- TODO ... from here -------------------
-
 //Display page for listing all items in a category.
 exports.category_detail_get = asyncHandler(async (req, res, next) => {
-  const [category, allCategoryItems] = await Promise.all([
-    Category.findById(req.params.id).exec(),
-    Item.find({ category: req.params.id }).exec(),
-  ]);
+  const categoryId = req.params.id;
 
-  if (category === null) {
-    // No results.
-    const err = new Error("Item not found");
-    err.status = 404;
-    return next(err);
+  if (categoryId) {
+    const category = await db.getCategoryById(categoryId);
+    const categoryItems = await db.getItemsByCategory(categoryId);
+
+    res.render("category_detail", {
+      title: "Category Detail",
+      category: category,
+      category_items: categoryItems,
+    });
+  } else {
+    throw new Error("requeted category does not exist.");
   }
-
-  res.render("category_detail", {
-    title: "Category Detail",
-    category: category,
-    category_items: allCategoryItems,
-  });
 });
 
-//Display page for listing all categpries.
+// ------------------- TODO ... from here -------------------
+
+//Display page for listing all categories.
 exports.category_list_get = asyncHandler(async (req, res, next) => {
   const allCategories = await Category.find().sort({ name: 1 }).exec();
   res.render("category_list", {

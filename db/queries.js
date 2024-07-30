@@ -8,11 +8,28 @@ async function countCategories() {
 
 async function countItems() {
   const { rows } = await pool.query(`SELECT SUM(number_in_stock) FROM items`);
-  console.log(rows);
   return rows[0].sum;
+}
+
+async function getCategoryById(categoryId) {
+  const { rows } = await pool.query(
+    `SELECT name FROM categories WHERE id = $1`,
+    [categoryId]
+  );
+  return rows[0];
+}
+
+async function getItemsByCategory(categoryId) {
+  const { rows } = await pool.query(
+    `SELECT * FROM items WHERE category_id = $1`,
+    [categoryId]
+  );
+  return rows;
 }
 
 module.exports = {
   countCategories,
   countItems,
+  getCategoryById,
+  getItemsByCategory,
 };
