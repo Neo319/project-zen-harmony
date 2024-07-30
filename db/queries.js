@@ -12,10 +12,9 @@ async function countItems() {
 }
 
 async function getCategoryById(categoryId) {
-  const { rows } = await pool.query(
-    `SELECT name FROM categories WHERE id = $1`,
-    [categoryId]
-  );
+  const { rows } = await pool.query(`SELECT * FROM categories WHERE id = $1`, [
+    categoryId,
+  ]);
   return rows[0];
 }
 
@@ -44,6 +43,15 @@ async function insertCategory(category) {
   }
 }
 
+async function deleteCategoryById(categoryId) {
+  try {
+    await pool.query(`DELETE FROM categories WHERE id = $1`, [categoryId]);
+  } catch (error) {
+    console.error("error deleting category", error);
+    throw error;
+  }
+}
+
 module.exports = {
   countCategories,
   countItems,
@@ -51,4 +59,5 @@ module.exports = {
   getItemsByCategory,
   getCategoryList,
   insertCategory,
+  deleteCategoryById,
 };

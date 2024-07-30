@@ -45,8 +45,6 @@ exports.category_list_get = asyncHandler(async (req, res) => {
   });
 });
 
-// ------------------- TODO ... from here -------------------
-
 //Display page for creating new category on GET.
 exports.category_create_get = asyncHandler(async (req, res) => {
   res.render("category_form", { title: "Create Category" });
@@ -78,7 +76,6 @@ exports.category_create_post = [
 
     if (!errors.isEmpty()) {
       // There are errors. Render form again with sanitized values/errors messages.
-      console.log(errors);
       res.render("category_form", {
         title: "Create Category",
         category: category,
@@ -96,26 +93,30 @@ exports.category_create_post = [
   }),
 ];
 
+// ------------------- TODO ... from here -------------------
+
 //Display page for deleting a category on GET.
 exports.category_delete_get = asyncHandler(async (req, res, next) => {
-  const [category, allCategoryItems] = await Promise.all([
-    Category.findById(req.params.id),
-    Item.find({ category: req.params.id }),
-  ]);
+  //db query: getCategoryById, getItemsByCategory
 
-  res.render("category_delete", {
-    category: category,
-    category_items: allCategoryItems,
-  });
+  const category = await db.getCategoryById(req.params.id);
+  const allCategoryItems = await db.getItemsByCategory(req.params.id);
+
+  if (!allCategoryItems.length) {
+    res.render("category_delete", {
+      category: category,
+      category_items: allCategoryItems,
+    });
+  } else {
+    res.send("category has items and cannot be deleted");
+  }
 });
 
 //Handle deleting a category on POST.
 exports.category_delete_post = asyncHandler(async (req, res, next) => {
   //Get category and all items.
-  const [category, allCategoryItems] = await Promise.all([
-    Category.findById(req.params.id),
-    Item.find({ category: req.params.id }),
-  ]);
+  const category = await db.getCategoryById(req.params.id);
+  const allCategoryItems = await db.getItemsByCategory(req.params.id);
 
   // check if category items exist, if so, treat the same as GET route.
   if (allCategoryItems.length > 0) {
@@ -126,7 +127,7 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
   }
 
   //delete category object in database.
-  await Category.findByIdAndDelete(req.params.id);
+  await db.deleteCategoryById(category.id);
   res.redirect("/inventory/category/");
 });
 
