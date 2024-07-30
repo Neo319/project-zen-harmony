@@ -27,9 +27,15 @@ async function getItemsByCategory(categoryId) {
   return rows;
 }
 
+async function getCategoryList() {
+  const { rows } = await pool.query(`SELECT * FROM categories`);
+  return rows;
+}
+
 module.exports = {
   countCategories,
   countItems,
   getCategoryById,
   getItemsByCategory,
+  getCategoryList,
 };

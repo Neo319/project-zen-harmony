@@ -36,16 +36,18 @@ exports.category_detail_get = asyncHandler(async (req, res, next) => {
   }
 });
 
-// ------------------- TODO ... from here -------------------
-
 //Display page for listing all categories.
 exports.category_list_get = asyncHandler(async (req, res, next) => {
-  const allCategories = await Category.find().sort({ name: 1 }).exec();
+  // db queries: getCategoryList
+  const allCategories = await db.getCategoryList();
+
   res.render("category_list", {
     title: "Category List",
     category_list: allCategories,
   });
 });
+
+// ------------------- TODO ... from here -------------------
 
 //Display page for creating new category on GET.
 exports.category_create_get = asyncHandler(async (req, res, next) => {
