@@ -1,5 +1,3 @@
-const Category = require("../models/category");
-const Item = require("../models/item");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
@@ -19,7 +17,7 @@ exports.index = asyncHandler(async (req, res, next) => {
 });
 
 //Display page for listing all items in a category.
-exports.category_detail_get = asyncHandler(async (req, res, next) => {
+exports.category_detail_get = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
 
   if (categoryId) {
@@ -37,7 +35,7 @@ exports.category_detail_get = asyncHandler(async (req, res, next) => {
 });
 
 //Display page for listing all categories.
-exports.category_list_get = asyncHandler(async (req, res, next) => {
+exports.category_list_get = asyncHandler(async (req, res) => {
   // db queries: getCategoryList
   const allCategories = await db.getCategoryList();
 
@@ -50,7 +48,7 @@ exports.category_list_get = asyncHandler(async (req, res, next) => {
 // ------------------- TODO ... from here -------------------
 
 //Display page for creating new category on GET.
-exports.category_create_get = asyncHandler(async (req, res, next) => {
+exports.category_create_get = asyncHandler(async (req, res) => {
   res.render("category_form", { title: "Create Category" });
 });
 
@@ -69,17 +67,18 @@ exports.category_create_post = [
     .withMessage("Category description must be specified."),
 
   //process request after validation (asyncHandler here)
-  asyncHandler(async (req, res, next) => {
+  asyncHandler(async (req, res) => {
     const errors = validationResult(req);
 
     //create Category object with escaped and trimmed data.
-    const category = new Category({
+    const category = {
       name: req.body.name,
       description: req.body.description,
-    });
+    };
 
     if (!errors.isEmpty()) {
       // There are errors. Render form again with sanitized values/errors messages.
+      console.log(errors);
       res.render("category_form", {
         title: "Create Category",
         category: category,
@@ -90,9 +89,9 @@ exports.category_create_post = [
       // Data from form is valid.
 
       // Save category.
-      await category.save();
+      await db.insertCategory(category);
       // Redirect to new author record.
-      res.redirect(`/inventory/category${category.id}`);
+      res.redirect(`/inventory/category`);
     }
   }),
 ];

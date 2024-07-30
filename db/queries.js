@@ -32,10 +32,23 @@ async function getCategoryList() {
   return rows;
 }
 
+async function insertCategory(category) {
+  try {
+    await pool.query(
+      `INSERT INTO categories (name, description) VALUES ($1, $2)`,
+      [category.name, category.description]
+    );
+  } catch (error) {
+    console.error("error inserting category", error);
+    throw error;
+  }
+}
+
 module.exports = {
   countCategories,
   countItems,
   getCategoryById,
   getItemsByCategory,
   getCategoryList,
+  insertCategory,
 };
