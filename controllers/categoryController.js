@@ -18,6 +18,8 @@ exports.index = asyncHandler(async (req, res, next) => {
   });
 });
 
+// ------------------- TODO ... from here -------------------
+
 //Display page for listing all items in a category.
 exports.category_detail_get = asyncHandler(async (req, res, next) => {
   const [category, allCategoryItems] = await Promise.all([
