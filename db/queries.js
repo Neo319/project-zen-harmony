@@ -64,6 +64,11 @@ async function updateCategoryById(categoryId, newCategory) {
   }
 }
 
+async function getAllCategories() {
+  const { rows } = await pool.query(`SELECT * FROM categories`);
+  return rows;
+}
+
 // ------------------------ ITEM QUERIES ------------------------
 
 async function getItemById(itemId) {
@@ -109,6 +114,20 @@ async function getCategoryByItemId(itemId) {
   }
 }
 
+async function insertItem(item) {
+  try {
+    const result = await pool.query(
+      `INSERT INTO items (name, description, category_id, price, number_in_stock) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+      [item.name, item.description, item.category, item.price, item.in_stock]
+    );
+
+    return result.rows[0].id; //for redirecting user
+  } catch (error) {
+    console.error("error inserting category", error);
+    throw error;
+  }
+}
+
 module.exports = {
   countCategories,
   countItems,
@@ -118,7 +137,9 @@ module.exports = {
   insertCategory,
   deleteCategoryById,
   updateCategoryById,
+  getAllCategories,
 
   getItemById,
   getCategoryByItemId,
+  insertItem,
 };

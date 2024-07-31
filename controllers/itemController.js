@@ -3,8 +3,6 @@ const { body, validationResult } = require("express-validator");
 
 const db = require("../db/queries");
 
-// ------------------- TODO ... from here -------------------
-
 //Display item detail page on GET.
 exports.item_detail_get = asyncHandler(async (req, res, next) => {
   //find item & category id
@@ -18,9 +16,11 @@ exports.item_detail_get = asyncHandler(async (req, res, next) => {
   });
 });
 
+// ------------------- TODO ... from here -------------------
+
 //Display page for creating new item on GET.
 exports.item_create_get = asyncHandler(async (req, res, next) => {
-  const allCategories = await Category.find().sort({ name: 1 }).exec();
+  const allCategories = await db.getAllCategories();
 
   res.render("item_form", {
     title: "Create Item",
@@ -54,13 +54,13 @@ exports.item_create_post = [
     const errors = validationResult(req);
 
     //create new Item object.
-    const item = new Item({
+    const item = {
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
       in_stock: req.body.in_stock,
       category: req.body.category,
-    });
+    };
 
     if (!errors.isEmpty()) {
       //there are errors. Re-render the form with sanitized data.
@@ -70,8 +70,8 @@ exports.item_create_post = [
       });
     } else {
       //Data is valid: save to database and redirect.
-      await item.save();
-      res.redirect(`/inventory/item${item.id}/`);
+      const newItemId = await db.insertItem(item);
+      res.redirect(`/inventory/item${newItemId}`);
     }
   }),
 ];
