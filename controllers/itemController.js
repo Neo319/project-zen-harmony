@@ -111,8 +111,6 @@ exports.item_update_get = asyncHandler(async (req, res, next) => {
   });
 });
 
-// ------------------- TODO ... from here -------------------
-
 //Handle updating an item on POST.
 exports.item_update_post = [
   //Validate and sanitize data.
@@ -139,14 +137,13 @@ exports.item_update_post = [
     const errors = validationResult(req);
 
     //create new Item object.
-    const item = new Item({
+    const item = {
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
       in_stock: req.body.in_stock,
       category: req.body.category,
-      _id: req.params.id,
-    });
+    };
 
     if (!errors.isEmpty()) {
       //there are errors. Re-render the form with sanitized data.
@@ -156,8 +153,9 @@ exports.item_update_post = [
       });
     } else {
       //Data is valid: Update to database and redirect.
-      const updatedItem = await Item.findByIdAndUpdate(req.params.id, item, {});
-      res.redirect(`/inventory/item${updatedItem.id}/`);
+      await db.updateItemById(req.params.id, item);
+
+      res.redirect(`/inventory/item${req.params.id}/`);
     }
   }),
 ];

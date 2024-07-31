@@ -137,6 +137,25 @@ async function deleteItemById(itemId) {
   }
 }
 
+async function updateItemById(itemId, newItem) {
+  try {
+    await pool.query(
+      `UPDATE items SET name = $2, description = $3, category_id = $4, price = $5, number_in_stock = $6 WHERE id = $1`,
+      [
+        itemId,
+        newItem.name,
+        newItem.description,
+        newItem.category,
+        newItem.price,
+        newItem.in_stock,
+      ]
+    );
+  } catch (error) {
+    console.error("error updating item", error);
+    throw error;
+  }
+}
+
 module.exports = {
   countCategories,
   countItems,
@@ -152,4 +171,5 @@ module.exports = {
   getCategoryByItemId,
   insertItem,
   deleteItemById,
+  updateItemById,
 };

@@ -18,13 +18,13 @@ block content
         input#price.form_control(type='number', placeholder='0,00', name='price', required value=(undefined === item ? '' : item.price))
       
       label(for="in_stock") Number in Stock: 
-      input#in_stock.form_control(type='number', placeholder='10', name='in_stock', required value=(undefined === item ? '' : item.in_stock))
+      input#in_stock.form_control(type='number', placeholder='10', name='in_stock', required value=(undefined === item ? '' : item.number_in_stock))
 
       label(for="category") Item Category: 
       select#category.form_control(name="category", required)
         option(value="") --Please Select a Category.-- 
         each category in categories
-          option(value=category.id, selected=(item && item.category && item.category.id === category.id)) #{category.name}
+          option(value=category.id, selected=(item && item.category_id && item.category_id === category.id)) #{category.name}
 
     button.btn.btn-primary(type='submit') Submit
 
