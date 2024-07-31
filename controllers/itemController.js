@@ -16,8 +16,6 @@ exports.item_detail_get = asyncHandler(async (req, res, next) => {
   });
 });
 
-// ------------------- TODO ... from here -------------------
-
 //Display page for creating new item on GET.
 exports.item_create_get = asyncHandler(async (req, res, next) => {
   const allCategories = await db.getAllCategories();
@@ -76,10 +74,12 @@ exports.item_create_post = [
   }),
 ];
 
+// ------------------- TODO ... from here -------------------
+
 //Display page for deleting an item on GET.
 exports.item_delete_get = asyncHandler(async (req, res, next) => {
-  const item = await Item.findById(req.params.id);
-  const category = await Category.findById(item.category);
+  const item = await db.getItemById(req.params.id);
+  const category = await db.getCategoryById(item.category_id);
 
   res.render("item_delete", {
     title: "Delete Item",
@@ -90,11 +90,12 @@ exports.item_delete_get = asyncHandler(async (req, res, next) => {
 
 //Handle deleting an item on POST.
 exports.item_delete_post = asyncHandler(async (req, res, next) => {
-  const item = await Item.findById(req.params.id);
+  const item = await db.getItemById(req.params.id);
+  const category = await db.getCategoryById(item.category_id);
 
   //No checks needed.
-  await Item.findByIdAndDelete(req.params.id);
-  res.redirect(`/inventory/category${item.category}/`);
+  await db.deleteItemById(req.params.id);
+  res.redirect(`/inventory/category${category.id}/`);
 });
 
 //Display page for updating an item on GET.

@@ -128,6 +128,15 @@ async function insertItem(item) {
   }
 }
 
+async function deleteItemById(itemId) {
+  try {
+    await pool.query(`DELETE FROM items where id = $1`, [itemId]);
+  } catch (error) {
+    console.error("error deleting item", error);
+    throw error;
+  }
+}
+
 module.exports = {
   countCategories,
   countItems,
@@ -142,4 +151,5 @@ module.exports = {
   getItemById,
   getCategoryByItemId,
   insertItem,
+  deleteItemById,
 };
