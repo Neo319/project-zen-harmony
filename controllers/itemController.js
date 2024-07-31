@@ -1,12 +1,15 @@
-const Category = require("../models/category");
-const Item = require("../models/item");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
+const db = require("../db/queries");
+
+// ------------------- TODO ... from here -------------------
+
 //Display item detail page on GET.
 exports.item_detail_get = asyncHandler(async (req, res, next) => {
-  const item = await Item.findById(req.params.id);
-  const category = await Category.findById(item.category);
+  //find item & category id
+  const item = await db.getItemById(req.params.id);
+  const category = await db.getCategoryByItemId(req.params.id);
 
   res.render("item_detail", {
     title: "Item detail",

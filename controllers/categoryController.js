@@ -129,8 +129,6 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
   res.redirect("/inventory/category/");
 });
 
-// ------------------- TODO ... from here -------------------
-
 //Display page for updating a category on GET.
 exports.category_update_get = asyncHandler(async (req, res, next) => {
   const category = await db.getCategoryById(req.params.id);

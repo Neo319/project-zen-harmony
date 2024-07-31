@@ -1,6 +1,6 @@
 const pool = require("./pool");
 
-//homepage: return count of all categories and items
+// ------------------------ CATEGORIES QUERIES ------------------------
 async function countCategories() {
   const { rows } = await pool.query(`SELECT COUNT(*) FROM categories`);
   return rows[0].count;
@@ -54,13 +54,57 @@ async function deleteCategoryById(categoryId) {
 
 async function updateCategoryById(categoryId, newCategory) {
   try {
-    //something
     await pool.query(
       `UPDATE categories SET name = $2, description = $3 WHERE id = $1`,
       [categoryId, newCategory.name, newCategory.description]
     );
   } catch (error) {
     console.error("error updating category", error);
+    throw error;
+  }
+}
+
+// ------------------------ ITEM QUERIES ------------------------
+
+async function getItemById(itemId) {
+  try {
+    const { rows } = await pool.query(`SELECT * FROM items WHERE id = $1`, [
+      itemId,
+    ]);
+    return rows[0];
+  } catch (error) {
+    console.error("error finding item", error);
+    throw error;
+  }
+}
+
+async function getCategoryByItemId(itemId) {
+  try {
+    // Step 1: Retrieve the category_id from the items table
+    const itemResult = await pool.query(
+      "SELECT category_id FROM items WHERE id = $1",
+      [itemId]
+    );
+
+    if (itemResult.rows.length === 0) {
+      throw new Error("Item not found");
+    }
+
+    const categoryId = itemResult.rows[0].category_id;
+
+    // Step 2: Retrieve the category details from the categories table
+    const categoryResult = await pool.query(
+      "SELECT * FROM categories WHERE id = $1",
+      [categoryId]
+    );
+
+    if (categoryResult.rows.length === 0) {
+      throw new Error("Category not found");
+    }
+
+    return categoryResult.rows[0];
+  } catch (error) {
+    console.error("Error finding category by item id", error);
     throw error;
   }
 }
@@ -74,4 +118,7 @@ module.exports = {
   insertCategory,
   deleteCategoryById,
   updateCategoryById,
+
+  getItemById,
+  getCategoryByItemId,
 };
