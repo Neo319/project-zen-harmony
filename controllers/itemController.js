@@ -74,8 +74,6 @@ exports.item_create_post = [
   }),
 ];
 
-// ------------------- TODO ... from here -------------------
-
 //Display page for deleting an item on GET.
 exports.item_delete_get = asyncHandler(async (req, res, next) => {
   const item = await db.getItemById(req.params.id);
@@ -100,20 +98,20 @@ exports.item_delete_post = asyncHandler(async (req, res, next) => {
 
 //Display page for updating an item on GET.
 exports.item_update_get = asyncHandler(async (req, res, next) => {
-  const [item, allCategories] = await Promise.all([
-    Item.findById(req.params.id),
-    Category.find().sort({ name: 1 }).exec(),
-  ]);
+  const item = await db.getItemById(req.params.id);
+  const categories = await db.getAllCategories();
 
-  const itemCategory = await Category.findById(item.category);
+  const itemCategory = await db.getCategoryById(item.category_id);
 
   res.render("item_form", {
     title: "Update Item",
     item: item,
-    categories: allCategories,
+    categories: categories,
     item_category: itemCategory,
   });
 });
+
+// ------------------- TODO ... from here -------------------
 
 //Handle updating an item on POST.
 exports.item_update_post = [
