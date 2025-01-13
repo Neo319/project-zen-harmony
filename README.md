@@ -49,5 +49,4 @@ This project's front end is deployed on Glitch.
 ## Contact
 
 - Email: alexmnevins@gmail.com
-- LinkedIn: [Your LinkedIn](https://www.linkedin.com/in/alex-nevins-489488282/)
-- GitHub: [Your GitHub](https://github.com/Neo319)
+- LinkedIn: [Alex Nevins](https://www.linkedin.com/in/alex-nevins-489488282/)
